@@ -31,116 +31,122 @@ impl<T> Dimension3<T>
 }
 
 
+
+
+
+/// use Min to set a minimum value
+/// use Max to set a maximum value
+/// use Both to set a minimum and maximum value
+#[derive(Clone, Copy)]
+pub enum ClampType{
+    Min,
+    Max,
+    Both
+}
+
+
+
+/// version of Dimension3 that handles clamping d3 values in a variety of ways
+/// use low_clamp_value for ClampType::Min
+/// use high_clamp_value for ClampType::Max
+/// set whichever is unused to your types zero value
 #[derive(Clone, Copy)]
 pub struct ClampedDimension3<T>{
     x: T,
-    y: T,
+    y: T, 
     z: T,
+    clamp_type: ClampType,
     high_clamp_value: T,
-    low_clamp_value: T,
+    low_clamp_value: T
 }
 impl<T> ClampedDimension3<T>
-    where
-        T: std::cmp::PartialOrd
-        + Neg<Output = T>
-        + Copy
+    where T: std::cmp::PartialOrd + Copy + Neg<Output = T>
 {
-    pub fn new(x: T, y: T, z: T, high_clamp_value: T, low_clamp_value: T) -> Self{
+    pub fn new(x: T, y: T, z: T, clamp_type: ClampType, high_clamp_value: T, low_clamp_value: T) -> Self{
         Self{
-            x: clamp::clamp_assym(x, high_clamp_value, low_clamp_value), 
-            y: clamp::clamp_assym(y, high_clamp_value, low_clamp_value),
-            z: clamp::clamp_assym(z, high_clamp_value, low_clamp_value),
+            x, y, z,
+            clamp_type,
             high_clamp_value,
-            low_clamp_value,
+            low_clamp_value
         }
     }
 
     pub fn x(self: &Self) -> T{self.x}
     pub fn set_x(self: &mut Self, x: T){
-        self.x = clamp::clamp_assym(x, self.high_clamp_value, self.low_clamp_value);
+        match &self.clamp_type{
+            ClampType::Min => {
+                self.x = clamp::min(x, self.low_clamp_value);
+            },
+            ClampType::Max => {
+                self.x = clamp::max(x, self.high_clamp_value);
+            },
+            ClampType::Both => {
+                self.x = clamp::clamp_assym(x, self.high_clamp_value, self.low_clamp_value);
+            }
+        }
     }
     
     pub fn y(self: &Self) -> T{self.y}
     pub fn set_y(self: &mut Self, y: T){
-        self.y = clamp::clamp_assym(y, self.high_clamp_value, self.low_clamp_value);
+        match &self.clamp_type{
+            ClampType::Min => {
+                self.y = clamp::min(y, self.low_clamp_value);
+            },
+            ClampType::Max => {
+                self.y = clamp::max(y, self.high_clamp_value);
+            },
+            ClampType::Both => {
+                self.y = clamp::clamp_assym(y, self.high_clamp_value, self.low_clamp_value);
+            }
+        }
     }
     
     pub fn z(self: &Self) -> T{self.z}
     pub fn set_z(self: &mut Self, z: T){
-        self.z = clamp::clamp_assym(z, self.high_clamp_value, self.low_clamp_value);
-    }
-}
-
-#[derive(Clone, Copy)]
-pub struct MinDimension3<T>{
-    x: T,
-    y: T,
-    z: T,
-    min_clamp_value: T
-}
-impl <T> MinDimension3<T>
-    where
-        T: std::cmp::PartialOrd
-        + Copy
-{
-    pub fn new(x: T, y: T, z: T, min_clamp_value: T) -> Self{
-        Self{
-            x: clamp::min(x, min_clamp_value),
-            y: clamp::min(y, min_clamp_value),
-            z: clamp::min(z, min_clamp_value),
-            min_clamp_value
+        match &self.clamp_type{
+            ClampType::Min => {
+                self.z = clamp::min(z, self.low_clamp_value);
+            },
+            ClampType::Max => {
+                self.z = clamp::max(z, self.high_clamp_value);
+            },
+            ClampType::Both => {
+                self.z = clamp::clamp_assym(z, self.high_clamp_value, self.low_clamp_value);
+            }
         }
     }
-
-    pub fn x(self: &Self) -> T{self.x}
-    pub fn set_x(self: &mut Self, x: T){
-        self.x = clamp::min(x, self.min_clamp_value);
-    }
-
-    pub fn y(self: &Self) -> T{self.y}
-    pub fn set_y(self: &mut Self, y: T){
-        self.y = clamp::min(y, self.min_clamp_value);
-    }
-
-    pub fn z(self: &Self) -> T{self.z}
-    pub fn set_z(self: &mut Self, z: T){
-        self.z = clamp::min(z, self.min_clamp_value);
-    }
 }
 
-#[derive(Clone, Copy)]
-pub struct MaxDimension3<T>{
-    x: T,
-    y: T,
-    z: T,
-    max_clamp_value: T
+
+
+
+
+
+
+// can prob use more tests, but this is all im doing for now...
+#[test]
+fn test_clamp_min(){
+    let expected_value: f32 = 0.0;
+    let mut test_var = ClampedDimension3::new(0.0, 0.0, 0.0, ClampType::Min, 0.0, 0.0);
+    test_var.set_x(-1.0);
+    assert!((test_var.x() - expected_value).abs() < 0.001);
 }
-impl <T> MaxDimension3<T>
-    where
-        T: std::cmp::PartialOrd
-        + Copy
-{
-    pub fn new(x: T, y: T, z: T, max_clamp_value: T) -> Self{
-        Self{
-            x: clamp::max(x, max_clamp_value),
-            y: clamp::max(y, max_clamp_value),
-            z: clamp::max(z, max_clamp_value),
-            max_clamp_value
-        }
-    }
 
-    pub fn x(self: &Self) -> T{self.x}
-    pub fn set_x(self: &mut Self, x: T){
-        self.x = clamp::max(x, self.max_clamp_value);
-    }
+#[test]
+fn test_clamp_max(){
+    let expected_value: f32 = 0.0;
+    let mut test_var = ClampedDimension3::new(0.0, 0.0, 0.0, ClampType::Max, 0.0, 0.0);
+    test_var.set_x(1.0);
+    assert!((test_var.x() - expected_value).abs() < 0.001);
+}
 
-    pub fn y(self: &Self) -> T{self.y}
-    pub fn set_y(self: &mut Self, y: T){
-        self.y = clamp::max(y, self.max_clamp_value);
-    }
-
-    pub fn z(self: &Self) -> T{self.z}
-    pub fn set_z(self: &mut Self, z: T){
-        self.z = clamp::max(z, self.max_clamp_value);
-    }
+#[test]
+fn test_clamp_both(){
+    let high_expected_value: f32 = 1.0;
+    let low_expected_value: f32 = -1.0;
+    let mut test_var = ClampedDimension3::new(0.0, 0.0, 0.0, ClampType::Both, 1.0, -1.0);
+    test_var.set_x(2.0);
+    test_var.set_y(-2.0);
+    assert!((test_var.x() - high_expected_value).abs() < 0.001);
+    assert!((test_var.y() - low_expected_value).abs() < 0.001);
 }

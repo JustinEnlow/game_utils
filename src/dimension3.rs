@@ -16,6 +16,9 @@ impl<T> Dimension3<T>
     pub fn new(x: T, y: T, z: T) -> Self{
         Self{x, y, z}
     }
+    pub fn default(zero: T) -> Self{
+        Self{x: zero, y: zero, z: zero}
+    }
     
     pub fn x(self: &Self) -> T{self.x}
     pub fn x_mut(self: &mut Self) -> &mut T{&mut self.x}    //needed for setting PID struct fields
@@ -46,7 +49,7 @@ pub enum ClampType{
 
 
 
-/// version of Dimension3 that handles clamping d3 values in a variety of ways
+/// version of Dimension3 that handles clamping dimension3 values in a variety of ways
 /// use low_clamp_value for ClampType::Min
 /// use high_clamp_value for ClampType::Max
 /// set whichever is unused to your types zero value

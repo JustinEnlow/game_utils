@@ -2,7 +2,8 @@ use std::ops::Neg;
 
 
 
-// low_clamp_value <= input_value <= high_clamp_value
+/// clamp input value between two values, where the clamp values are not a positive and negative of the same number
+/// low_clamp_value <= input_value <= high_clamp_value
 pub fn clamp_assym<T: PartialOrd + Neg<Output = T> + Copy>(input_value: T, high_clamp_value: T, low_clamp_value: T) -> T{
     if input_value > high_clamp_value{
         high_clamp_value
@@ -15,7 +16,8 @@ pub fn clamp_assym<T: PartialOrd + Neg<Output = T> + Copy>(input_value: T, high_
     }
 }
 
-// -clamp_value <= input_value <= clamp_value
+/// clamp input value between two value, where the clamp values are a positive and negative of the same number
+/// -clamp_value <= input_value <= clamp_value
 pub fn clamp<T: PartialOrd + Neg<Output = T> + Copy>(input_value: T, clamp_value: T) -> T{
     if input_value > clamp_value{
         clamp_value
@@ -28,6 +30,7 @@ pub fn clamp<T: PartialOrd + Neg<Output = T> + Copy>(input_value: T, clamp_value
     }
 }
 
+/// clamp input value from going below a minimum value
 pub fn min<T: PartialOrd + Copy>(input_value: T, min_value: T) -> T{
     if input_value < min_value{
         min_value
@@ -37,6 +40,7 @@ pub fn min<T: PartialOrd + Copy>(input_value: T, min_value: T) -> T{
     }
 }
 
+/// clamp input value from going above a maximum value
 pub fn max<T: PartialOrd + Copy>(input_value: T, max_value: T) -> T{
     if input_value > max_value{
         max_value

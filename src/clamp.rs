@@ -1,4 +1,4 @@
-use std::ops::Neg;
+use std::ops::{Neg, Mul};
 
 
 
@@ -48,6 +48,18 @@ pub fn max<T: PartialOrd + Copy>(input_value: T, max_value: T) -> T{
     else{
         input_value
     }
+}
+
+pub fn cmp_mul_assym<T: PartialOrd + Mul<Output = T> + Copy>(
+    input_value: T, compare_value: T, high_mul_value: T, low_mul_value: T
+) -> T{
+    if input_value > compare_value{
+        input_value * high_mul_value
+    }
+    else if input_value < compare_value{
+        input_value * low_mul_value
+    }
+    else{compare_value}
 }
 
 

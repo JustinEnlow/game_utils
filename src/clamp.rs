@@ -57,7 +57,7 @@ pub fn cmp_mul_assym<T: PartialOrd + Mul<Output = T> + Copy + Neg<Output = T>>(
         input_value * high_mul_value
     }
     else if input_value < compare_value{
-        input_value * -low_mul_value        //low_mul_value needs to be negative so that the multiplication returns the correct values...
+        input_value * low_mul_value
     }
     else{compare_value}
 }

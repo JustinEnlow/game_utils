@@ -34,10 +34,11 @@ impl<T> AxisContribution<T>
         Self{positive, negative}
     }
 
-    pub fn positive(self: &Self) -> &T{&self.positive}
+    pub fn positive(self: &Self) -> /*&*/T{/*&*/self.positive}
     pub fn positive_mut(self: &mut Self) -> &mut T{&mut self.positive}
     pub fn set_positive(self: &mut Self, value: T){self.positive = value}
 
-    pub fn negative(self: &Self) -> &T{&self.negative}
+    pub fn negative(self: &Self) -> /*&*/T{/*&*/self.negative}
     pub fn negative_mut(self: &mut Self) -> &mut T{&mut self.negative}
+    pub fn set_negative(self: &mut Self, value: T){self.negative = value}
 }

@@ -10,6 +10,12 @@ impl<T> ControlAxis<T>
     pub fn new(linear: T, rotational: T) -> Self{
         Self{linear, rotational}
     }
+    pub fn default(default: T) -> Self{
+        Self {
+            linear: default, 
+            rotational: default
+        }
+    }
 
     //pub fn linear(self: &Self) -> T{self.linear}
     pub fn linear/*_ref*/(self: &Self) -> &T{&self.linear}

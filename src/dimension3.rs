@@ -33,6 +33,16 @@ impl<T> Dimension3<T>
     pub fn set_z(self: &mut Self, z: T){self.z = z}
 }
 
+//pub struct Vector3<T>{
+//    x: T,
+//    y: T,
+//    z: T,
+//    length: T,
+//}
+//impl<T> Vector3<T>
+//    where T: Copy// + num::Float
+//{}
+
 
 
 

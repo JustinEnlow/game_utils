@@ -5,6 +5,7 @@ use std::ops::Add;
 pub mod control_axis;
 pub mod toggle;
 pub mod dimension3;
+pub mod physics;
 
 pub fn sum_d3_control_axes<T>(
     input1: ControlAxis<Dimension3<T>>, 

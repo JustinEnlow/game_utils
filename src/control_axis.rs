@@ -26,6 +26,16 @@ impl<T> ControlAxis<T>
     pub fn rotational_mut(self: &mut Self) -> &mut T{&mut self.rotational}
 }
 
+//pub trait TControlAxis{
+//    type Output;
+//
+//    fn linear(self: &Self) -> &Self::Output;
+//    fn linear_mut(self: &mut Self) -> &mut Self::Output;
+//
+//    fn rotational(self: &Self) -> &Self::Output;
+//    fn rotational_mut(self: &mut Self) -> &mut Self::Output;
+//}
+
 
 
 #[derive(Clone, Copy)]
